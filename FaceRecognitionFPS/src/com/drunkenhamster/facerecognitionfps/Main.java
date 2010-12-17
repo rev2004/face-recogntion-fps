@@ -25,8 +25,7 @@ public class Main extends Activity {
 	 * Variabelen 
 	 */
 	static final String TAG = "FaceRecognitionFPS";
-	Button  versusButton, teamBattleButton, achievementsButton, 
-			optionsButton, quitButton, drunkenHamsterButton;
+	Button  achievementsButton, quitButton, drunkenHamsterButton;
 	
 	
     /** Called when the activity is first created. */
@@ -35,31 +34,13 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        versusButton = (Button) findViewById(R.id.versusButton);
-        teamBattleButton = (Button) findViewById(R.id.teamBattleButton);
+        /**
+         * Buttons
+         */
         achievementsButton = (Button) findViewById(R.id.achievementsButton);
-        optionsButton = (Button) findViewById(R.id.optionsButton);
-        quitButton = (Button) findViewById(R.id.quitButton);
         drunkenHamsterButton = (Button) findViewById(R.id.drunkenHamsterButton);
         
-        versusButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Log.d(TAG, "Click on versusbutton");
-			}
-		});
-        
-        teamBattleButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Log.d(TAG, "Click on team battle button");
-			}
-		});
-        
+              
         achievementsButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -69,7 +50,7 @@ public class Main extends Activity {
 			}
 		});
         
-        optionsButton.setOnClickListener(new OnClickListener() {
+        /*optionsButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -78,7 +59,7 @@ public class Main extends Activity {
 				Intent i = new Intent(v.getContext(), StartScreen.class);
 				startActivityForResult(i, 0);
 			}
-		});
+		});*/
         
         quitButton.setOnClickListener(new OnClickListener() {
 			
