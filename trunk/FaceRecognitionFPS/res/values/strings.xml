@@ -8,4 +8,5 @@
 
 <color name="playerColor">#818181</color>
 <string name="PlayerName">standaardNaam</string>
+<color name="White">#FFFFFF</color>
 </resources>
