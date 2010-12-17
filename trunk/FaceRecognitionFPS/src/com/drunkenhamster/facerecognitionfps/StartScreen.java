@@ -78,26 +78,6 @@ public class StartScreen extends Activity {
 					alertDialog.setIcon(R.drawable.icon);
 					alertDialog.show();
 				}
-				/*if(!playerInput.getText().toString().equals("")){
-					// inputveld niet leeg? 
-					editor.putString("playerUsername", playerInput.getText().toString());
-					editor.commit();
-					// Nu pas doorsturen naar het main menu
-					Intent i = new Intent(v.getContext(), Main.class);
-					startActivity(i);
-				}else{
-					final AlertDialog alertDialog = new AlertDialog.Builder(StartScreen.this).create();
-					alertDialog.setTitle("Error");
-					alertDialog.setMessage("Please fill in an username");
-					alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							alertDialog.cancel();
-						}
-					});
-					alertDialog.setIcon(R.drawable.icon);
-					alertDialog.show();
-				}*/
 				Log.d(TAG, "Click on go button");				
 			}
 		});
