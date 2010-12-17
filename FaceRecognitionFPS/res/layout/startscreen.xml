@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:id="@+id/RelativeLayout01"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:padding="0dip" android:layout_height="wrap_content"
+	android:layout_width="fill_parent">
+	<ImageView android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:src="@drawable/logo"
+		android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
+		android:id="@+id/logo" android:layout_marginTop="50.333333333333333dip">
+	</ImageView>
+	<RelativeLayout android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:layout_centerHorizontal="true"
+		android:id="@+id/playerInfoLayout" android:layout_below="@+id/logo" android:layout_marginTop="50dip">
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:typeface="sans" android:textColor="@color/playerColor"
+			android:textSize="14px" android:id="@+id/player"
+			android:text="PLAYER:" android:layout_marginRight="20dip"></TextView>
+		
+	<EditText android:text="@+id/EditText01" android:layout_toRightOf="@+id/player" android:layout_width="wrap_content" android:id="@+id/EditText01" android:layout_height="wrap_content" android:layout_alignTop="@+id/player" android:layout_alignBottom="@+id/player"></EditText>
+</RelativeLayout>
+	<AbsoluteLayout android:layout_alignParentBottom="true"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:id="@+id/drunkenHamsterLayout">
+		<Button android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:background="@drawable/drunkenhamsterlogo"
+			android:id="@+id/drunkenHamsterButton"></Button>
+	</AbsoluteLayout>
+</RelativeLayout>

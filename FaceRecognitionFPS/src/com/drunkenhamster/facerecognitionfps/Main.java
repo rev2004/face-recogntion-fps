@@ -25,7 +25,8 @@ public class Main extends Activity {
 	 * Variabelen 
 	 */
 	static final String TAG = "FaceRecognitionFPS";
-	Button  versusButton, teamBattleButton, achievementsButton, optionsButton, quitButton, drunkenHamsterButton;
+	Button  versusButton, teamBattleButton, achievementsButton, 
+			optionsButton, quitButton, drunkenHamsterButton;
 	
 	
     /** Called when the activity is first created. */
@@ -74,6 +75,8 @@ public class Main extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.d(TAG, "Click on options button");
+				Intent i = new Intent(v.getContext(), StartScreen.class);
+				startActivityForResult(i, 0);
 			}
 		});
         
@@ -83,6 +86,7 @@ public class Main extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.d(TAG, "Click on quit button");
+				
 			}
 		});
         
