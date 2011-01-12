@@ -3,6 +3,8 @@ package com.drunkenhamster.facerecognitionfps;
 import com.drunkenhamster.facerecognitionfps.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -104,4 +106,28 @@ public class Main extends Activity {
 			}
 		});
     }
+    
+    @Override
+    public void onBackPressed() {
+    	final AlertDialog alertDialog = new AlertDialog.Builder(Main.this).create();
+		alertDialog.setTitle("Logout");
+		alertDialog.setMessage("Are you sure ?");
+		alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// terugsturen naar het main menu
+				Intent i = new Intent(v.getContext(), Main.class);
+				startActivityForResult(i, 0);
+			}
+		});
+		alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				alertDialog.cancel();
+			}
+		});
+		alertDialog.setIcon(R.drawable.icon);
+		alertDialog.show();
+    }
+    
 }

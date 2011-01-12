@@ -32,15 +32,18 @@ public final class R {
         public static final int drunkenHamsterButton=0x7f06000b;
         public static final int drunkenHamsterLayout=0x7f06000a;
         public static final int gameModeButton=0x7f060003;
-        public static final int goButton=0x7f06000d;
+        public static final int goButton=0x7f060010;
         public static final int logo=0x7f060001;
         public static final int menuBackgroundLayout=0x7f060002;
+        public static final int password=0x7f06000e;
+        public static final int passwordEditText=0x7f06000f;
         public static final int player=0x7f060008;
         public static final int playerInfoLayout=0x7f060007;
         public static final int playerName=0x7f060009;
         public static final int quitButton=0x7f060006;
         public static final int startButton=0x7f060004;
-        public static final int usernameEditText=0x7f06000c;
+        public static final int username=0x7f06000c;
+        public static final int usernameEditText=0x7f06000d;
     }
     public static final class layout {
         public static final int main=0x7f030000;

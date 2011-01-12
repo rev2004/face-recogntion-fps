@@ -64,7 +64,7 @@ public class StartScreen extends Activity {
 					editor.commit();
 					// Nu pas doorsturen naar het main menu
 					Intent i = new Intent(v.getContext(), Main.class);
-					startActivity(i);
+					startActivityForResult(i, 0);
 				}else{
 					final AlertDialog alertDialog = new AlertDialog.Builder(StartScreen.this).create();
 					alertDialog.setTitle("Error");
