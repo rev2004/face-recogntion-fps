@@ -55,6 +55,7 @@ public class Main extends Activity {
          */
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String playerUsername = settings.getString("playerUsername", "default");
+        String playerId = settings.getString("playerId", "default"); // userId van de speler uit de database
         username.setText(playerUsername);
         
         startButton.setOnClickListener(new OnClickListener() {
@@ -69,7 +70,7 @@ public class Main extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Log.d(TAG, "Click on gamemode button");
+				Log.d(TAG, "Click on teambattle button");
 			}
 		});
         
