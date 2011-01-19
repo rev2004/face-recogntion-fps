@@ -1,10 +1,11 @@
 package com.drunkenhamster.facerecognitionfps;
 
+import com.drunkenhamster.facerecognitionfps.R;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -16,9 +17,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.drunkenhamster.facerecognitionfps.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -33,8 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- * Main Menu Activity
- * @author Harrie Essing - deluxz@gmail.com
+ * StartScreen Activity
+ * @author Harrie Essing - harrie.essing@gmail.com
  * 
  * Eerst scherm van het spel. Hier moet de gebruiker een username
  * invullen.
@@ -47,7 +45,7 @@ public class StartScreen extends Activity {
 	 * Variabelen 
 	 */
 	public static final String PREFS_NAME = "GamePreferences";		// Preference File
-	static final String TAG = "FaceRecognitionFPS START MENU";		// TAG voor het debuggen
+	static final String TAG = "HeadHunter Login Menu";				// TAG voor het debuggen
 	Button goButton, drunkenHamsterButton;							// Buttons
 	EditText playerInputUsername;									// EditText om spelernaam in te vullen
 	EditText playerInputPassword;									// EditText om wachtwoord in te vullen
@@ -62,7 +60,7 @@ public class StartScreen extends Activity {
         setContentView(R.layout.startscreen);
         
         /**
-         * Buttons
+         * Layout elementen definieren
          */
         goButton = (Button) findViewById(R.id.goButton);
         drunkenHamsterButton = (Button) findViewById(R.id.drunkenHamsterButton);
@@ -86,7 +84,7 @@ public class StartScreen extends Activity {
 				if(!playerInputUsername.getText().toString().equals("")){
 					// inputveld is niet leeg
 					editor.putString("playerUsername", playerInputUsername.getText().toString());
-					// http Post
+					// HTTP Post
 					try{
 						HttpClient httpClient = new DefaultHttpClient();
 						HttpPost httpPost = new HttpPost(url);
@@ -98,7 +96,7 @@ public class StartScreen extends Activity {
 						Log.e(TAG, "error in http connection " +e.toString());
 					}
 					
-					// convert response to string
+					// Convert response to string
 					try{
 						BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
 						StringBuilder sb = new StringBuilder();
@@ -113,7 +111,7 @@ public class StartScreen extends Activity {
 						Log.e(TAG, "error converting result " +e.toString());
 					}
 					
-					// parse json data
+					// Parse JSON Data
 					try {
 						JSONArray jArray = new JSONArray(result);					
 						for(int i = 0; i < jArray.length(); i++){

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Main MENU!!!!!</string>
-    <string name="app_name">FaceRecognitionFPS</string>
+    <string name="app_name">Headhunter</string>
 
 
 
@@ -9,4 +9,5 @@
 <color name="playerColor">#818181</color>
 <string name="PlayerName">standaardNaam</string>
 <color name="White">#FFFFFF</color>
+<color name="Gold">#696555</color>
 </resources>
