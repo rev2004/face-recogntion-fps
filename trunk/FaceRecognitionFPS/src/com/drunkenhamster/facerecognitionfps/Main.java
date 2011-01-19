@@ -116,8 +116,7 @@ public class Main extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// terugsturen naar het main menu
-				Intent i = new Intent(v.getContext(), Main.class);
-				startActivityForResult(i, 0);
+				alertDialog.hide();
 			}
 		});
 		alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
