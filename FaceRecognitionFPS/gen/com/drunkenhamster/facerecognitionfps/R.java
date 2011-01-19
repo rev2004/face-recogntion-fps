@@ -15,16 +15,20 @@ public final class R {
         public static final int playerColor=0x7f050000;
     }
     public static final class drawable {
-        public static final int achievements=0x7f020000;
-        public static final int drunkenhamsterlogo=0x7f020001;
-        public static final int gamemode=0x7f020002;
-        public static final int go=0x7f020003;
-        public static final int icon=0x7f020004;
-        public static final int logo=0x7f020005;
-        public static final int menubackground=0x7f020006;
-        public static final int quitgame=0x7f020007;
-        public static final int startgame=0x7f020008;
-        public static final int textfield=0x7f020009;
+        public static final int background=0x7f020000;
+        public static final int btn_achievements=0x7f020001;
+        public static final int btn_achievements_hover=0x7f020002;
+        public static final int btn_go=0x7f020003;
+        public static final int btn_quitgame=0x7f020004;
+        public static final int btn_quitgame_hover=0x7f020005;
+        public static final int btn_singlebatle=0x7f020006;
+        public static final int btn_singlebattle_hover=0x7f020007;
+        public static final int btn_teambattle=0x7f020008;
+        public static final int btn_teambattle_hover=0x7f020009;
+        public static final int drunkenhamsterlogo=0x7f02000a;
+        public static final int field=0x7f02000b;
+        public static final int icon=0x7f02000c;
+        public static final int logo=0x7f02000d;
     }
     public static final class id {
         public static final int RelativeLayout01=0x7f060000;
