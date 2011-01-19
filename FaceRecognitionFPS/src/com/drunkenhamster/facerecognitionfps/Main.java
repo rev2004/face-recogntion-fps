@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 /**
  * Main Menu Activity
- * @author Harrie Essing - deluxz@gmail.com
+ * @author Harrie Essing - harrie.essing@gmail.com
  * 
  * Main menu voor het spel.
  * 
@@ -29,11 +29,10 @@ public class Main extends Activity {
 	 * Variabelen 
 	 */
 	public static final String PREFS_NAME = "GamePreferences";		// Preference File
-	static final String TAG = "FaceRecognitionFPS MAIN MENU";
+	static final String TAG = "Headhunter Main Menu";				// TAG voor het debuggen
 	Button startButton, gameModeButton, achievementsButton, 
-		   quitButton, drunkenHamsterButton;
-	TextView username;
-	
+		   quitButton, drunkenHamsterButton;						// Buttons
+	TextView username;												// Textview voor de spelernaam
 	
     /** Called when the activity is first created. */
     @Override
@@ -42,7 +41,7 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         
         /**
-         * Buttons definieren
+         * Layout elementen definieren
          */
         startButton = (Button) findViewById(R.id.startButton);
         gameModeButton = (Button) findViewById(R.id.gameModeButton);
@@ -54,8 +53,9 @@ public class Main extends Activity {
          * SharedPreferences ophalen en username textview aanpassen
          */
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        final SharedPreferences.Editor editor = settings.edit();
         String playerUsername = settings.getString("playerUsername", "default");
-        String playerId = settings.getString("playerId", "default"); // userId van de speler uit de database
+        final String playerId = settings.getString("playerId", "default"); // userId van de speler uit de database
         username.setText(playerUsername);
         
         startButton.setOnClickListener(new OnClickListener() {
@@ -77,7 +77,11 @@ public class Main extends Activity {
         achievementsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				// userId doorgeven aan achievementsview, makkelijk om de gegevens op te halen
+				editor.putString("playerId", playerId.toString());
+				// Nu pas doorsturen naar het main menu
+				Intent intentAchievements = new Intent(v.getContext(), Achievements.class);
+				startActivityForResult(intentAchievements, 0);
 				Log.d(TAG, "Click on achievements button");
 			}
 		});
