@@ -13,13 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    />
-</LinearLayout>
+<resources>
+	<string-array name="select_fdetlevel">
+        <item>Fine (detect small faces but slow)</item>
+        <item>Normal(recommended)</item>
+    </string-array>
+	<string-array name="select_appmode">
+        <item>Face Crop Mode</item>
+        <item>Darth Vader Face Mode</item>
+    </string-array>
+</resources>
