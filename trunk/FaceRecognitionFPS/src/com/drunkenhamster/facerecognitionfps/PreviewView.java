@@ -60,8 +60,8 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	
     private static final String TAG = "SnapFace";
     
-	private final static int PREVIEW_WIDTH_FINE		= 320;
-	private final static int PREVIEW_WIDTH_NORMAL	= 240;
+	private final static int PREVIEW_WIDTH_FINE		= 640;
+	private final static int PREVIEW_WIDTH_NORMAL	= 384;
 	
 	// mag ratio for eye-distant to face region
 	private final static float MAG_EYEDIST_FACE		= 3.0f;
@@ -302,6 +302,8 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	 		String tokens[] = strPrevSizesVals.split(",");
 	 		for( int i=0; i < tokens.length; i++ ){
 	 	 		String tokens2[] = tokens[i].split("x");
+	 	 		System.out.println("" + tokens[i]);
+	 	 		Log.d(TAG, "" + tokens[i]);
 	 			if( tokens[i].contains(Integer.toString(PREVIEW_WIDTH_FINE)) )
 	 				previewHeightFine = Integer.parseInt(tokens2[1]);
 	 			if( tokens[i].contains(Integer.toString(PREVIEW_WIDTH_NORMAL)) )
