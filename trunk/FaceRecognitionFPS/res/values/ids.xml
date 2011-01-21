@@ -13,13 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    />
-</LinearLayout>
+<resources>
+	<item type="id" name="menu_Preferences" />
+	<item type="id" name="menu_AppMode" />
+	<item type="id" name="PreferencesDlg" />
+	<item type="id" name="AppModeDlg" />
+
+	<item type="id" name="menu_SetAs" />
+	<item type="id" name="menu_Undo" />
+
+</resources>

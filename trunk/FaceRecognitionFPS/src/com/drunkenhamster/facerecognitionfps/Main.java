@@ -38,7 +38,7 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.mainmenu);
         
         /**
          * Layout elementen definieren
@@ -62,6 +62,9 @@ public class Main extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				// Nu pas doorsturen naar het main menu
+				Intent intentSingleGame = new Intent(v.getContext(), SnapFaceActivity.class);
+				startActivityForResult(intentSingleGame, 0);
 				Log.d(TAG, "Cick on start button");
 			}
 		});
