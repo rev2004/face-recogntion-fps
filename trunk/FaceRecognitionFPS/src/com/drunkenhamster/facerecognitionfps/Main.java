@@ -115,8 +115,8 @@ public class Main extends Activity {
     @Override
     public void onBackPressed() {
     	final AlertDialog alertDialog = new AlertDialog.Builder(Main.this).create();
-		alertDialog.setTitle("Logout");
-		alertDialog.setMessage("Are you sure ?");
+		alertDialog.setTitle(" ");
+		alertDialog.setMessage("Are you sure to logout ?");
 		alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
