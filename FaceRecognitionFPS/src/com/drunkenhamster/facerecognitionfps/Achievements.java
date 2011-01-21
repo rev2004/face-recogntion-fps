@@ -20,9 +20,14 @@ import org.json.JSONObject;
 import com.drunkenhamster.facerecognitionfps.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -41,6 +46,7 @@ public class Achievements extends Activity {
 	public static final String PREFS_NAME = "GamePreferences";			// Preference File
 	static final String TAG = "Headhunter Achievements Menu";			// TAG voor het debuggen
 	TextView playerName, playerRank, playerScore;						// Textviews
+	Button drunkenHamsterButton;										// Buttons
 	// Voor het ophalen van de score
 	InputStream is;
 	String url = "http://facerecognition.twidel.nl/users/getPlayerInfo.php";
@@ -52,11 +58,12 @@ public class Achievements extends Activity {
         setContentView(R.layout.achievements);
         
         /**
-         * Layout elemente definieren
+         * Layout elementen definieren
          */
         playerName = (TextView) findViewById(R.id.achievementsPlayerData);
         playerRank = (TextView) findViewById(R.id.achievementsRankData);
         playerScore = (TextView) findViewById(R.id.achievementsScoreData);
+        drunkenHamsterButton = (Button) findViewById(R.id.drunkenHamsterButton);
         /**
          * SharedPreferences ophalen en username textview aanpassen
          */
@@ -148,7 +155,21 @@ public class Achievements extends Activity {
         	Log.e(TAG, "error parsing json data " +e.toString());
         }
         
-        
+        drunkenHamsterButton.setOnClickListener(new OnClickListener() {
+			/**
+			 * Bij een onclick op het logo opent een browser de url 
+			 * van onze blog
+			 */
+			@Override
+			public void onClick(View v) {
+				String url = "http://facerecognition.twidel.nl";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
+				
+				Log.d(TAG, "Click on drunkenhamster uber logo button");				
+			}
+		});
         
     }
 	
