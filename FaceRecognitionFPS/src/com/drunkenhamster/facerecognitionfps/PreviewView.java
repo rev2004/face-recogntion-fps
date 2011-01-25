@@ -16,6 +16,7 @@
 
 package com.drunkenhamster.facerecognitionfps;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -57,7 +58,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 /* Class PreviewView for camera surface
  */
 class PreviewView extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback, AutoFocusCallback {
-	
+	public String lastTakenpicString = null;
     private static final String TAG = "SnapFace";
     
 	private final static int PREVIEW_WIDTH_FINE		= 640;
@@ -193,6 +194,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			return false;
 		/* detect touch down */
 		if(event.getAction()==MotionEvent.ACTION_DOWN){
+			takingPicture_ = true;
 			/* CAUTION : touch point need to be same aspect to jpeg bitmap size */
 			int w = this.getWidth();
 			int h = this.getHeight();
@@ -201,25 +203,47 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			float yRatio = (float)h / previewHeight_;
 			selFacePt_ = null;
 			for(int i=0; i<MAX_FACE; i++){
+				
 				FaceResult face = faces_[i];
 				float eyedist = face.eyesDistance()*xRatio;
 				if(eyedist==0.0f)
 					continue;
-				PointF midEyes = new PointF();
-				face.getMidPoint(midEyes);
-				/* assume face rect is x3 size of eye distance each side */
-				PointF lt = new PointF(midEyes.x*xRatio-eyedist*1.5f,midEyes.y*yRatio-eyedist*1.5f);
-				Rect rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*3.0f),(int)(lt.y+eyedist*3.0f));
-				if( rect.contains(touchPt.x,touchPt.y)){
-					if(!isSDCardPresent_)
-					Toast.makeText(context_, R.string.SDCardNotPresentAlert, Toast.LENGTH_LONG).show();
+//				PointF midEyes = new PointF();
+//				face.getMidPoint(midEyes);
+//				/* assume face rect is x3 size of eye distance each side */
+//				PointF lt = new PointF(midEyes.x*xRatio-eyedist*1.5f,midEyes.y*yRatio-eyedist*1.5f);
+//				Rect rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*3.0f),(int)(lt.y+eyedist*3.0f));
+				
+					if(!isSDCardPresent_){
+						takingPicture_ = false;
+					Toast.makeText(context_, R.string.SDCardNotPresentAlert, Toast.LENGTH_LONG).show();}
 					else{
 						takingPicture_ = true;
 						Toast.makeText(context_, R.string.CapturingAlert, Toast.LENGTH_SHORT).show();
 						selFacePt_ = new PointF((float)touchPt.x/w,(float)touchPt.y/h);
 					}
 					break;
-				}
+				
+					//Original code copy: 
+//				FaceResult face = faces_[i];
+//				float eyedist = face.eyesDistance()*xRatio;
+//				if(eyedist==0.0f)
+//					continue;
+//				PointF midEyes = new PointF();
+//				face.getMidPoint(midEyes);
+//				/* assume face rect is x3 size of eye distance each side */
+//				PointF lt = new PointF(midEyes.x*xRatio-eyedist*1.5f,midEyes.y*yRatio-eyedist*1.5f);
+//				Rect rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*3.0f),(int)(lt.y+eyedist*3.0f));
+//				if( rect.contains(touchPt.x,touchPt.y)){
+//					if(!isSDCardPresent_)
+//					Toast.makeText(context_, R.string.SDCardNotPresentAlert, Toast.LENGTH_LONG).show();
+//					else{
+//						takingPicture_ = true;
+//						Toast.makeText(context_, R.string.CapturingAlert, Toast.LENGTH_SHORT).show();
+//						selFacePt_ = new PointF((float)touchPt.x/w,(float)touchPt.y/h);
+//					}
+//					break;
+//				}
 			}
 			/* call autofocus. if takingPicture_ == true, take picture upon completion */
 			camera_.autoFocus(this);
@@ -311,7 +335,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	 		}
  		}
  		else{
- 			previewHeightFine = 240;
+ 			previewHeightFine = 640;
  			previewHeightNorm = 160;
  		}
 		if( fdetLevel_ == 0 ){
@@ -324,7 +348,17 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			fdtmodeBitmap_ = BitmapFactory.decodeResource(context_.getResources(), R.drawable.fdt_norm);
 		}
  		String capTokens1[] = strCapSizesVals.split(",");
- 		String capTokens2[] = capTokens1[capTokens1.length-1].split("x");
+ 		String capTokens2[] = null;
+ 		for(String st : capTokens1){
+ 			if(st.contains("1024")){
+ 				capTokens2 = new String[2];
+ 				capTokens2[0] = "1024";
+ 				capTokens2[1] = "768";
+ 			}
+ 		}
+ 		if(capTokens2 == null){
+ 			capTokens2 = capTokens1[capTokens1.length-1].split("x");
+ 		}
  		captureWidth_ = Integer.parseInt(capTokens2[0]);
  		captureHeight_ = Integer.parseInt(capTokens2[1]);
  		/* set preview size small for fast analysis. let say QQVGA
@@ -362,85 +396,121 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	/* jpegCallback */
 	private PictureCallback pictureCallbackJpeg = new PictureCallback() {
 		public void onPictureTaken(byte[] _data, Camera _camera) {
+			OutputStream outStream = null;
+			String filename = String.format("/sdcard/%d.jpg", System.currentTimeMillis());
+			try {
+				BitmapFactory.Options opts;
+		        opts = new BitmapFactory.Options();
+		        opts.inJustDecodeBounds = false;
+		        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+		        Log.d("AA", "hi");
+		        Bitmap fullbmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+		        Log.d("AA", "decoded");
+				ContentValues values = new ContentValues();
+				values.put(Media.DISPLAY_NAME, filename);
+				values.put(Media.TITLE, filename);
+				String absFilePath = filename;
+				values.put(Media.DATA, absFilePath);
+				values.put(Media.MIME_TYPE, "image/jpeg");
+				Log.d("AA", "uri");
+				Uri uri = context_.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+				/* save file */
+			    outStream = context_.getContentResolver().openOutputStream(uri);
+			    Log.d("AA", "stream reached");
+				fullbmp.compress(Bitmap.CompressFormat.JPEG, 90, outStream);
+				outStream.flush();
+				outStream.close();
+				Log.d("AA", "onPictureTaken - wrote bytes: " + _data.length);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+			}
+
+			Log.d("AA", "onPictureTaken - jpeg");
+			lastTakenpicString = filename;
+			camera_.startPreview();
+			
 //			Log.i(TAG,"jpegCallback:"+_data);
 			takingPicture_ = false;
 			/* convert jpeg buffer to Bitmap */
-			BitmapFactory.Options opts = new BitmapFactory.Options();
-			opts.inJustDecodeBounds = true;
-			Bitmap fullbmp = BitmapFactory.decodeByteArray(_data, 0, _data.length, opts);
-			int w = opts.outWidth;
-			int h = opts.outHeight;
-			Log.i(TAG,"fullbitmap raw: w="+w+",h="+h);
-			opts.inJustDecodeBounds = false;
-			opts.inSampleSize = (int)(w/captureWidth_);
-			// resample
-			fullbmp = BitmapFactory.decodeByteArray(_data, 0, _data.length,opts);
-			w = fullbmp.getWidth();
-			h = fullbmp.getHeight();
-			Log.i(TAG,"fullbitmap mod: w="+w+",h="+h);
-			/* CAUTION
-			 * takepicture callback image may differs not just aspect
-			 * but also the view angle. need to fix them.
-			 */
-			float orgRatio = (float)previewWidth_/previewHeight_;
-			float offset_w = (w - h*orgRatio)/2.0f;
-			float xRatio = (float)(h*orgRatio) / previewWidth_; 
-			float yRatio = (float)h / previewHeight_;
-			/* restore touch point to bitmap size */
-			Point touchPt = new Point((int)(selFacePt_.x*w),(int)(selFacePt_.y*h));
-			for(int i=0; i<MAX_FACE; i++){
-				FaceResult face = faces_[i];
-				float eyedist = face.eyesDistance()*xRatio;
-				if(eyedist==0.0f)
-					continue;
-				PointF midEyes = new PointF(); 
-				face.getMidPoint(midEyes);
-				/* don't want region to be overlapped */
-				PointF lt = new PointF(midEyes.x*xRatio-eyedist*MAG_EYEDIST_FACE*0.5f+offset_w,midEyes.y*yRatio-eyedist*MAG_EYEDIST_FACE*0.5f);
-				Rect rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*MAG_EYEDIST_FACE),(int)(lt.y+eyedist*MAG_EYEDIST_FACE));
-				if(!rect.contains(touchPt.x,touchPt.y))
-					continue;
-				/* expand region for cropping face */
-				lt = new PointF(midEyes.x*xRatio-eyedist*MAG_EYEDIST_FACE*0.5f+offset_w,midEyes.y*yRatio-eyedist*MAG_EYEDIST_FACE*0.5f);
-				rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*MAG_EYEDIST_FACE),(int)(lt.y+eyedist*MAG_EYEDIST_FACE));
-				/* fix to fit within bitmap */
-				rect.left = rect.left < 0 ? 0 : rect.left;
-				rect.right = rect.right > w ? w : rect.right;
-				rect.top = rect.top < 0 ? 0 : rect.top;
-				rect.bottom = rect.bottom > h ? h : rect.bottom;
-				/* crop */
-				Bitmap facebmp = Bitmap.createBitmap(fullbmp,rect.left,rect.top,rect.width(),rect.height());
-				if(appMode_!=0&&overlayBitmap_!=null){
-					//todo: merge bitmap
-					Canvas c = new Canvas(facebmp);
-		            Paint p = new Paint();
-		            float len = eyedist*MAG_EYEDIST_FACE;
-					PointF lt_mask = new PointF((facebmp.getWidth()-len)/2.0f,(facebmp.getHeight()-len)/2.0f);
-	        		c.drawBitmap(overlayBitmap_, null , new Rect((int)lt_mask.x, (int)lt_mask.y,(int)(lt_mask.x+len),(int)(lt_mask.y+len)),p);
-				}
-				if(calledACTION_GET_CONTENT_){
-					// scale to contact icon
-					boolean scaleUp = facebmp.getWidth() < CONTACT_ICON_PIXLEN ? true : false;
-					facebmp = Util.transform(new Matrix(), facebmp, CONTACT_ICON_PIXLEN, CONTACT_ICON_PIXLEN, scaleUp);
-					Activity curAct = (Activity)context_;
-					Bundle extras = new Bundle();
-					extras.putParcelable("data", facebmp);
-					curAct.setResult(Activity.RESULT_OK, (new Intent()).setAction("inline-data").putExtras(extras));
-					curAct.finish();
-				}
-				else{
-					/* Save bitmap to file */
-					Uri uri = SaveBitmapToFile(facebmp);
-					if(uri!=null){
-						Intent intent = new Intent(Intent.ACTION_VIEW, uri, context_, ImageViewActivity.class);
-						context_.startActivity(intent);
-						return;
-					}
-				}
-				break;
-			}
-			/* restart preview */
-			camera_.startPreview();
+//			BitmapFactory.Options opts = new BitmapFactory.Options();
+//			opts.inJustDecodeBounds = true;
+//			Bitmap fullbmp = BitmapFactory.decodeByteArray(_data, 0, _data.length, opts);
+//			int w = opts.outWidth;
+//			int h = opts.outHeight;
+//			Log.i(TAG,"fullbitmap raw: w="+w+",h="+h);
+//			opts.inJustDecodeBounds = false;
+//			opts.inSampleSize = (int)(w/captureWidth_);
+//			// resample
+//			fullbmp = BitmapFactory.decodeByteArray(_data, 0, _data.length,opts);
+//			w = fullbmp.getWidth();
+//			h = fullbmp.getHeight();
+//			Log.i(TAG,"fullbitmap mod: w="+w+",h="+h);
+//			/* CAUTION
+//			 * takepicture callback image may differs not just aspect
+//			 * but also the view angle. need to fix them.
+//			 */
+//			float orgRatio = (float)previewWidth_/previewHeight_;
+//			float offset_w = (w - h*orgRatio)/2.0f;
+//			float xRatio = (float)(h*orgRatio) / previewWidth_; 
+//			float yRatio = (float)h / previewHeight_;
+//			/* restore touch point to bitmap size */
+//			Point touchPt = new Point((int)(selFacePt_.x*w),(int)(selFacePt_.y*h));
+//			for(int i=0; i<MAX_FACE; i++){
+//				FaceResult face = faces_[i];
+//				float eyedist = face.eyesDistance()*xRatio;
+//				if(eyedist==0.0f)
+//					continue;
+//				PointF midEyes = new PointF(); 
+//				face.getMidPoint(midEyes);
+//				/* don't want region to be overlapped */
+//				PointF lt = new PointF(midEyes.x*xRatio-eyedist*MAG_EYEDIST_FACE*0.5f+offset_w,midEyes.y*yRatio-eyedist*MAG_EYEDIST_FACE*0.5f);
+//				Rect rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*MAG_EYEDIST_FACE),(int)(lt.y+eyedist*MAG_EYEDIST_FACE));
+//				if(!rect.contains(touchPt.x,touchPt.y))
+//					continue;
+//				/* expand region for cropping face */
+//				lt = new PointF(midEyes.x*xRatio-eyedist*MAG_EYEDIST_FACE*0.5f+offset_w,midEyes.y*yRatio-eyedist*MAG_EYEDIST_FACE*0.5f);
+//				rect = new Rect((int)(lt.x),(int)(lt.y),(int)(lt.x+eyedist*MAG_EYEDIST_FACE),(int)(lt.y+eyedist*MAG_EYEDIST_FACE));
+//				/* fix to fit within bitmap */
+//				rect.left = rect.left < 0 ? 0 : rect.left;
+//				rect.right = rect.right > w ? w : rect.right;
+//				rect.top = rect.top < 0 ? 0 : rect.top;
+//				rect.bottom = rect.bottom > h ? h : rect.bottom;
+//				/* crop */
+//				Bitmap facebmp = Bitmap.createBitmap(fullbmp,rect.left,rect.top,rect.width(),rect.height());
+//				if(appMode_!=0&&overlayBitmap_!=null){
+//					//todo: merge bitmap
+//					Canvas c = new Canvas(facebmp);
+//		            Paint p = new Paint();
+//		            float len = eyedist*MAG_EYEDIST_FACE;
+//					PointF lt_mask = new PointF((facebmp.getWidth()-len)/2.0f,(facebmp.getHeight()-len)/2.0f);
+//	        		c.drawBitmap(overlayBitmap_, null , new Rect((int)lt_mask.x, (int)lt_mask.y,(int)(lt_mask.x+len),(int)(lt_mask.y+len)),p);
+//				}
+//				if(calledACTION_GET_CONTENT_){
+//					// scale to contact icon
+//					boolean scaleUp = facebmp.getWidth() < CONTACT_ICON_PIXLEN ? true : false;
+//					facebmp = Util.transform(new Matrix(), facebmp, CONTACT_ICON_PIXLEN, CONTACT_ICON_PIXLEN, scaleUp);
+//					Activity curAct = (Activity)context_;
+//					Bundle extras = new Bundle();
+//					extras.putParcelable("data", facebmp);
+//					curAct.setResult(Activity.RESULT_OK, (new Intent()).setAction("inline-data").putExtras(extras));
+//					curAct.finish();
+//				}
+//				else{
+//					/* Save bitmap to file */
+//					Uri uri = SaveBitmapToFile(facebmp);
+//					if(uri!=null){
+//						Intent intent = new Intent(Intent.ACTION_VIEW, uri, context_, ImageViewActivity.class);
+//						context_.startActivity(intent);
+//						return;
+//					}
+//				}
+//				break;
+//			}
+//			/* restart preview */
+//			camera_.startPreview();
 		}
 	};
 	
