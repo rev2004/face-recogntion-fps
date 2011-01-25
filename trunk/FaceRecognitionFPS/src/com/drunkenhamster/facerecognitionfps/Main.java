@@ -94,7 +94,7 @@ public class Main extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.d(TAG, "Click on quit button");
-				
+				finish();
 			}
 		});
         
@@ -125,6 +125,7 @@ public class Main extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				// terugsturen naar het main menu
 				alertDialog.hide();
+				finish();
 			}
 		});
 		alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {

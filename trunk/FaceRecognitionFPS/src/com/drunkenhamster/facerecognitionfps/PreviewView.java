@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/* 
+ * used and edited by Fontys Hogeschool students Eindhoven for a school project in september2010-januari2011
+ * Project name: "Headhunter" (Originally started off as "Face Recognition FPS")
+ * Project group name: Drunken Hamsters
+ * Code editors: Andrax van den Bogaard; Harrie Essing.
+ */
+
 package com.drunkenhamster.facerecognitionfps;
 
 import java.io.FileNotFoundException;
