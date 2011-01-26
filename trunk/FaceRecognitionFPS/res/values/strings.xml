@@ -6,6 +6,7 @@
     <color name="playerColor">#818181</color>
 	<color name="White">#FFFFFF</color>
 	<color name="Gold">#696555</color>
+	<color name="black">#333333</color>
 
 	<!-- Face Detection strings -->
 	<string name="menu_Preferences">Preferences</string>
