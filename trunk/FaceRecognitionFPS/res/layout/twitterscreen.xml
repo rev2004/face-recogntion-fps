@@ -5,34 +5,18 @@
     android:layout_height="fill_parent"
     >
 
-<Button 
-	android:text="Login..." 
-	android:id="@+id/ButtonLogin" 
-	android:layout_width="wrap_content" 
-	android:layout_height="wrap_content" 
-	android:layout_marginBottom="20px">
-</Button>
-<Button
-	android:text="update"
-	android:id="@+id/ButtonUpdate"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
-</Button>
+<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ButtonLogin" android:text="Login to Twitter"></Button>
+<EditText android:typeface="serif" android:layout_height="100px" android:layout_width="fill_parent" android:id="@+id/textStatus" android:padding="5px" android:layout_marginTop="10px"></EditText><Button android:text="Send your photo and message! " android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ButtonUpdate"></Button>
 <TextView 
 	android:text="" 
 	android:id="@+id/tweet" 
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content">
 </TextView>
-<EditText
-	android:id="@+id/textStatus"
-	android:layout_width="fill_parent"
-	android:layout_height="100px"
-	android:padding="5px"
-	android:layout_marginTop="20px"
-	android:typeface="serif"
-	android:layout_below="@+id/topLabel"
-	android:layout_centerHorizontal="true">
-</EditText>
+
+
+
+
+
 
 </LinearLayout>

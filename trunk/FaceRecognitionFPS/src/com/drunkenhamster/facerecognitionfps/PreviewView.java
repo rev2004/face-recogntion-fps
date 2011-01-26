@@ -259,7 +259,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 //				}
 			}
 			/* call autofocus. if takingPicture_ == true, take picture upon completion */
-			camera_.autoFocus(this);
+			onAutoFocus(true, camera_);
 			donttouch = false;
 			return true;
 		}
