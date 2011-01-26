@@ -49,7 +49,7 @@ public class OAuth extends Activity {
 
 	// private static final String APP = "OAUTH";
 	public static final String PREFS_NAME = "GamePreferences"; // Preference
-																// File
+	// File
 	Twitter twitter = new TwitterFactory().getInstance();
 	RequestToken requestToken;
 	public final static String consumerKey = "hVuMCYLo9q1LdSzgVWk5g";
@@ -64,10 +64,12 @@ public class OAuth extends Activity {
 	EditText tweetText;
 	public String imagelocation;
 	public String verifier;
-	String url = "http://facerecognition.twidel.nl/users/getPlayerInfo.php";
+//	String url = "http://facerecognition.twidel.nl/users/getPlayerInfo.php";
+	String url2 = "http://facerecognition.twidel.nl/users/updateScore.php";
 	String playerId; // userId van de speler uit de database
 	InputStream is;
-
+	boolean busySending = false;
+	ArrayList<NameValuePair> nameValuePairs;
 	/**
 	 * Calls the OAuth login method as soon as its started
 	 */
@@ -96,41 +98,53 @@ public class OAuth extends Activity {
 		// add update button listener
 		buttonUpdate.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if (!busySending) {
+					String yourtweet = tweetText.getText().toString();
+					String status = tweetText.getText().toString();
+					tweetText.setText("Busy sending your tweet, please wait a moment");
+					if (status.length() > 100) {
+						final AlertDialog alertDialog = new AlertDialog.Builder(
+								OAuth.this).create();
+						alertDialog.setTitle(" ");
+						alertDialog
+								.setMessage("Your message shouldn'nt be longer than a 100 characters. please shorten it.");
+						alertDialog.setButton("Ok",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										alertDialog.cancel();
+									}
+								});
+						alertDialog.setIcon(R.drawable.icon);
+						tweetText.setText(yourtweet);
+						alertDialog.show();
 
-				String status = tweetText.getText().toString();
-				if (status.length() > 100) {
-					final AlertDialog alertDialog = new AlertDialog.Builder(
-							OAuth.this).create();
-					alertDialog.setTitle(" ");
-					alertDialog
-							.setMessage("Your message shouldn'nt be longer than a 100 characters. please shorten it.");
-					alertDialog.setButton("Ok",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									alertDialog.cancel();
-								}
-							});
-					alertDialog.setIcon(R.drawable.icon);
-					alertDialog.show();
-
-				} else {
-					Log.d("AUTH", "update button");
-					if (twitter.isOAuthEnabled() == true) {
-						try {
-							Log.d("AA", "update button");
-							String pic = postPic(imagelocation);
-							twitter.updateStatus("#headhunter " + pic + " "
-									+ status);
-							updateScore();
-							finish();
-						} catch (TwitterException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					} else {
-						OAuthLogin();
+						busySending = true;
+
+						Log.d("AUTH", "update button");
+						if (twitter.isOAuthEnabled() == true) {
+							try {
+								
+								Log.d("AA", "update button");
+								String pic = postPic(imagelocation);
+								twitter.updateStatus("#headhunter " + pic + " "
+										+ status);
+								updateScore();
+								busySending = false;
+								finish();
+							} catch (TwitterException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else {
+							
+							tweetText.setText("Logging you in to twitter, post again when this is finished!");
+							busySending = false;
+							OAuthLogin();
+							tweetText.setText(yourtweet);
+						}
 					}
 				}
 			}
@@ -142,135 +156,78 @@ public class OAuth extends Activity {
 		String result = "";
 		try {
 			settings.getString("playerId", "default");
-			
-			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+			nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("userId", playerId));
 
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
+			HttpPost httpPost = new HttpPost(url2);
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
-			// Convert response to string
 			try {
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is, "iso-8859-1"), 8);
-				StringBuilder sb = new StringBuilder();
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-				}
-				is.close();
-
-				result = sb.toString();
-			} catch (Exception e) {
-				Log.e("AA", "error converting result " + e.toString());
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
 			}
+			is.close();
+
+			result = sb.toString();
+			Log.d("AA", entity.getContent().toString());
 		} catch (Exception e) {
-			Log.e("AA", "error in http connection " + e.toString());
+			Log.e("AA", "error converting result " + e.toString());
 		}
-		try {
-			JSONArray jArray = new JSONArray(result);
-			for (int i = 0; i < jArray.length(); i++) {
-				JSONObject data = jArray.getJSONObject(i);
-				Log.i("AA", "username: " + data.getString("username")
-						+ "\n score: " + data.getString("score"));
-
-				// Put data in textviews
-				if (data.getInt("score") >= 0 && data.getInt("score") < 50) {
-					Toast.makeText(this, "You're ranked Private" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 50
-						&& data.getInt("score") < 99) {
-					Toast.makeText(this, "You're ranked Private 1st Class" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 100
-						&& data.getInt("score") < 149) {
-					Toast.makeText(this, "You're ranked Lance Corporal" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 150
-						&& data.getInt("score") < 199) {
-					Toast.makeText(this, "You're ranked Corporal" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 200
-						&& data.getInt("score") < 299) {
-					Toast.makeText(this, "You're ranked Sergeant" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 300
-						&& data.getInt("score") < 399) {
-					Toast.makeText(this, "You're ranked Staff Sergeant" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 400
-						&& data.getInt("score") < 499) {
-					Toast.makeText(this, "You're ranked Warrant Officer" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 500
-						&& data.getInt("score") < 599) {
-					Toast.makeText(this, "You're ranked Officer Cadet" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 600
-						&& data.getInt("score") < 749) {
-					Toast.makeText(this, "You're ranked Second Lieutenant" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 750
-						&& data.getInt("score") < 999) {
-					Toast.makeText(this, "You're ranked Lieutenant" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 1000
-						&& data.getInt("score") < 1249) {
-					Toast.makeText(this, "You're ranked Captain" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 1250
-						&& data.getInt("score") < 1499) {
-					Toast.makeText(this, "You're ranked Major" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 1500
-						&& data.getInt("score") < 1999) {
-					Toast.makeText(this, "You're ranked Lieutenant Colonel" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 2000
-						&& data.getInt("score") < 2499) {
-					Toast.makeText(this, "You're ranked Colonel" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 2500
-						&& data.getInt("score") < 2999) {
-					Toast.makeText(this, "You're ranked Brigadier" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 3000
-						&& data.getInt("score") < 3999) {
-					Toast.makeText(this, "You're ranked Major General" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 4000
-						&& data.getInt("score") < 4999) {
-					Toast.makeText(this, "You're ranked Lieutenant General" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 5000
-						&& data.getInt("score") < 14999) {
-					Toast.makeText(this, "You're ranked General" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				} else if (data.getInt("score") >= 15000) {
-					Toast.makeText(this, "You're ranked Master Headhunter" + " " + data.getInt("score") + " points!",
-							Toast.LENGTH_LONG);
-				}
+		}
+			catch (Exception e) {
+				Log.e("AA", "error in http connection " + e.toString());
 			}
-		} catch (JSONException e) {
-			Log.e("AA", "error parsing json data " + e.toString());
-		}
+//			HttpClient httpClient = new DefaultHttpClient();
+//			HttpPost httpPost = new HttpPost(url);
+//			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//			HttpResponse response = httpClient.execute(httpPost);
+//			HttpEntity entity = response.getEntity();
+//			is = entity.getContent();
+//			// Convert response to string
+//			try {
+//				BufferedReader reader = new BufferedReader(
+//						new InputStreamReader(is, "iso-8859-1"), 8);
+//				StringBuilder sb = new StringBuilder();
+//				String line = null;
+//				while ((line = reader.readLine()) != null) {
+//					sb.append(line + "\n");
+//				}
+//				is.close();
+//
+//				result = sb.toString();
+//			} catch (Exception e) {
+//				Log.e("AA", "error converting result " + e.toString());
+//			}
+//		} catch (Exception e) {
+//			Log.e("AA", "error in http connection " + e.toString());
+//		}
 		try {
 			statuses = twitter.getUserTimeline();
 			Toast.makeText(
 					this,
 					"Tweet placed! Press Back button to continue playing :"
-							+ statuses.get(0).getText(), Toast.LENGTH_LONG)
+							+ statuses.get(0).getText(), Toast.LENGTH_SHORT)
 					.show();
+			boolean found = false;
 			for (Status st : statuses) {
 				if (st.getText().startsWith("#headhunter", 0)) {
 					Log.d("AA", "headhunter found! :D");// HTTP Post
-
+					found = true;
+					
 				}
 			}
-
+			if(found){
+//			nameValuePairs.add(new BasicNameValuePair("score", "10"));
+			
+			}
 		} catch (Exception ex) {
 			Toast.makeText(this, "Error:" + ex.getMessage(), Toast.LENGTH_LONG)
 					.show();
