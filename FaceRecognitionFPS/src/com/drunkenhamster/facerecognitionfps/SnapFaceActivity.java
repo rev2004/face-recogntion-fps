@@ -46,7 +46,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 /* Activity Class
  */
 public class SnapFaceActivity extends Activity {
-
+	public static final String PREFS_NAME = "GamePreferences";		// Preference File
     private static final String TAG = "SnapFace";
 
     private PreviewView camPreview_;
@@ -55,6 +55,8 @@ public class SnapFaceActivity extends Activity {
 	private GoogleAnalyticsTracker tracker_;
 	private boolean calledACTION_GET_CONTENT_ = false;
 	private long startTimeMills_ = 0;
+	SharedPreferences settings2;
+    SharedPreferences.Editor editor;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -236,7 +238,13 @@ public class SnapFaceActivity extends Activity {
 	}
 	
 	public void openTwitter(String pic){
-		
+		settings2 = getSharedPreferences(PREFS_NAME, 0);
+	    editor = settings2.edit();
+	    Log.d("AA","snap+" + pic);
+		editor.putString("lastpic", pic.toString());
+		editor.commit();
+		String test = settings2.getString("lastpic", "default");
+		Log.d("AA", test);
 		Intent intentSingleGame = new Intent(camPreview_.getContext(), OAuth.class);
 		Log.d("AA", "intent made");
 		startActivityForResult(intentSingleGame, 0);
