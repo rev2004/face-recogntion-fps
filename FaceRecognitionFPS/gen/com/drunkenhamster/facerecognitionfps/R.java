@@ -40,6 +40,8 @@ public final class R {
     }
     public static final class id {
         public static final int AppModeDlg=0x7f050003;
+        public static final int ButtonLogin=0x7f05001e;
+        public static final int ButtonUpdate=0x7f05001f;
         public static final int PreferencesDlg=0x7f050002;
         public static final int RelativeLayout01=0x7f050006;
         public static final int achievementsButton=0x7f050015;
@@ -67,6 +69,9 @@ public final class R {
         public static final int playerName=0x7f050018;
         public static final int quitButton=0x7f050016;
         public static final int startButton=0x7f050014;
+        public static final int textStatus=0x7f050021;
+        public static final int topLabel=0x7f050022;
+        public static final int tweet=0x7f050020;
         public static final int username=0x7f050019;
         public static final int usernameEditText=0x7f05001a;
     }
@@ -76,6 +81,7 @@ public final class R {
         public static final int main=0x7f030002;
         public static final int mainmenu=0x7f030003;
         public static final int startscreen=0x7f030004;
+        public static final int twitterscreen=0x7f030005;
     }
     public static final class string {
         public static final int CapturingAlert=0x7f06000a;

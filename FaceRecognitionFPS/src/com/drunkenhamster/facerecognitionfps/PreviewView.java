@@ -115,6 +115,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	
 	private GoogleAnalyticsTracker tracker_ = null;
 	private boolean calledACTION_GET_CONTENT_ = false;
+	private boolean donttouch = false;
 
 	/* Constructor */
 	public PreviewView(Context context, boolean calledACTION_GET_CONTENT, GoogleAnalyticsTracker tracker) {
@@ -197,11 +198,16 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		/* do not handle if already going to take picture */
-		if(takingPicture_)
+		if(takingPicture_){
 			return false;
+		}
+		if(donttouch){
+			return false;
+		}
+		
 		/* detect touch down */
 		if(event.getAction()==MotionEvent.ACTION_DOWN){
-			takingPicture_ = true;
+			donttouch = true;
 			/* CAUTION : touch point need to be same aspect to jpeg bitmap size */
 			int w = this.getWidth();
 			int h = this.getHeight();
@@ -254,6 +260,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			}
 			/* call autofocus. if takingPicture_ == true, take picture upon completion */
 			camera_.autoFocus(this);
+			donttouch = false;
 			return true;
 		}
 		return false;
@@ -441,6 +448,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			
 //			Log.i(TAG,"jpegCallback:"+_data);
 			takingPicture_ = false;
+			openTwitter();
 			/* convert jpeg buffer to Bitmap */
 //			BitmapFactory.Options opts = new BitmapFactory.Options();
 //			opts.inJustDecodeBounds = true;
@@ -520,6 +528,14 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 //			camera_.startPreview();
 		}
 	};
+	
+	public void openTwitter(){
+		((SnapFaceActivity)context_).openTwitter(lastTakenpicString);
+//		Intent intentSingleGame = new Intent(context_, OAuth.class);
+//		Log.d("AA", "intent made");
+//		((Activity)context_).startActivityForResult(intentSingleGame, 0);
+//		Log.d("AA", "activity started");
+	}
 	
 	/* Save bitmap to file */
 	private Uri SaveBitmapToFile(Bitmap bmp) {

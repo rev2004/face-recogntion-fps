@@ -35,6 +35,18 @@
 			android:name=".ImageViewActivity"
 			android:label="@string/imgview">
 		</activity>
+		<activity android:name=".OAuth"
+                  android:label="@string/app_name"
+                  android:launchMode="singleInstance"
+                  >
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+            	<category android:name="android.intent.category.DEFAULT" />
+            	<category android:name="android.intent.category.BROWSABLE" />
+            	<data android:scheme="twitt" android:host=".SnapFaceActivity" />
+            </intent-filter>
+        </activity>
+		
 		<!--<activity android:name=".Twitter"
 		          android:label="@string/app_name">
 		    <intent-filter>
@@ -48,6 +60,5 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <!-- for mobile analytics test begin -->
-	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest> 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<Button 
+	android:text="Login..." 
+	android:id="@+id/ButtonLogin" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginBottom="20px">
+</Button>
+<Button
+	android:text="update"
+	android:id="@+id/ButtonUpdate"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+</Button>
+<TextView 
+	android:text="" 
+	android:id="@+id/tweet" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content">
+</TextView>
+<EditText
+	android:id="@+id/textStatus"
+	android:layout_width="fill_parent"
+	android:layout_height="100px"
+	android:padding="5px"
+	android:layout_marginTop="20px"
+	android:typeface="serif"
+	android:layout_below="@+id/topLabel"
+	android:layout_centerHorizontal="true">
+</EditText>
+
+</LinearLayout>

@@ -235,6 +235,12 @@ public class SnapFaceActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-
+	public void openTwitter(String pic){
+		
+		Intent intentSingleGame = new Intent(camPreview_.getContext(), OAuth.class);
+		Log.d("AA", "intent made");
+		startActivityForResult(intentSingleGame, 0);
+		Log.d("AA", "activity started");
+	}
 }
 
