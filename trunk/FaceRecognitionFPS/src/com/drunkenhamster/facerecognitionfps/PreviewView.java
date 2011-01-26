@@ -424,6 +424,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 				values.put(Media.DISPLAY_NAME, filename);
 				values.put(Media.TITLE, filename);
 				String absFilePath = filename;
+				lastTakenpicString = absFilePath;
 				values.put(Media.DATA, absFilePath);
 				values.put(Media.MIME_TYPE, "image/jpeg");
 				Log.d("AA", "uri");
@@ -443,7 +444,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 			}
 
 			Log.d("AA", "onPictureTaken - jpeg");
-			lastTakenpicString = filename;
+			
 			camera_.startPreview();
 			
 //			Log.i(TAG,"jpegCallback:"+_data);
@@ -530,6 +531,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	};
 	
 	public void openTwitter(){
+		Log.d("AA", lastTakenpicString);
 		((SnapFaceActivity)context_).openTwitter(lastTakenpicString);
 //		Intent intentSingleGame = new Intent(context_, OAuth.class);
 //		Log.d("AA", "intent made");
