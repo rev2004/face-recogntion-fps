@@ -22,8 +22,15 @@
  */
 package com.drunkenhamster.facerecognitionfps;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import twitter4j.Status;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -40,9 +47,20 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 /* Activity Class
  */
 public class SnapFaceActivity extends Activity {
@@ -57,6 +75,13 @@ public class SnapFaceActivity extends Activity {
 	private long startTimeMills_ = 0;
 	SharedPreferences settings2;
     SharedPreferences.Editor editor;
+    
+    String url = "http://facerecognition.twidel.nl/users/getPlayerInfo.php";
+	String url2 = "http://facerecognition.twidel.nl/users/updateScore.php";
+	String playerId; // userId van de speler uit de database
+	InputStream is;
+	boolean busySending = false;
+	ArrayList<NameValuePair> nameValuePairs;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -211,6 +236,7 @@ public class SnapFaceActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode==KeyEvent.KEYCODE_BACK){
+			//updateScore();
 	        if(calledACTION_GET_CONTENT_){
 	        	setResult(RESULT_CANCELED);
 				tracker_.trackEvent(getString(R.string.GA_CAT_ACT), getString(R.string.GA_ACT_GET_CONTENT), getString(R.string.GA_LBL_CANCEL) , 1);
@@ -249,6 +275,110 @@ public class SnapFaceActivity extends Activity {
 		Log.d("AA", "intent made");
 		startActivityForResult(intentSingleGame, 0);
 		Log.d("AA", "activity started");
+		//updateScore();
 	}
+	
+	public void updateScore() {
+		List<Status> statuses = null;
+		String result = "";
+		try {
+			settings2 = getSharedPreferences(PREFS_NAME, 0);
+		    editor = settings2.edit();
+			settings2.getString("playerId", "default");
+			boolean scored = settings2.getBoolean("scored", false);
+			if(!scored){return;}
+			Log.d("AA", "Scored");
+			nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("userId", playerId));
+
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpClient.execute(httpPost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+			try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			Toast.makeText(
+			this,
+			"Tweet placed! Press Back button to continue playing ", Toast.LENGTH_SHORT)
+			.show();
+			result = sb.toString();
+			Log.d("AA", "made it past PHP part");
+			editor.putBoolean("scored", false);
+			editor.commit();
+		} catch (Exception e) {
+			Log.e("AA", "error converting result " + e.toString());
+		}
+		}
+			catch (Exception e) {
+				Log.e("AA", "error in http connection " + e.toString());
+			}
+			 try{
+		        	JSONArray jArray = new JSONArray(result);
+		        	for(int i = 0; i < jArray.length(); i++){
+		        		JSONObject data = jArray.getJSONObject(i);
+		        		Log.i("AA", "username: "+data.getString("username")+ "\n score: "+data.getString("score"));
+		        	}
+		    }catch(JSONException e){
+		            	Log.e(TAG, "error parsing json data " +e.toString());
+		            }
+//			HttpClient httpClient = new DefaultHttpClient();
+//			HttpPost httpPost = new HttpPost(url);
+//			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//			HttpResponse response = httpClient.execute(httpPost);
+//			HttpEntity entity = response.getEntity();
+//			is = entity.getContent();
+//			// Convert response to string
+//			try {
+//				BufferedReader reader = new BufferedReader(
+//						new InputStreamReader(is, "iso-8859-1"), 8);
+//				StringBuilder sb = new StringBuilder();
+//				String line = null;
+//				while ((line = reader.readLine()) != null) {
+//					sb.append(line + "\n");
+//				}
+//				is.close();
+//
+//				result = sb.toString();
+//			} catch (Exception e) {
+//				Log.e("AA", "error converting result " + e.toString());
+//			}
+//		} catch (Exception e) {
+//			Log.e("AA", "error in http connection " + e.toString());
+//		}
+//		try {
+//			statuses = twitter.getUserTimeline();
+//			Toast.makeText(
+//					this,
+//					"Tweet placed! Press Back button to continue playing :"
+//							+ statuses.get(0).getText(), Toast.LENGTH_SHORT)
+//					.show();
+//			boolean found = false;
+//			for (Status st : statuses) {
+//				if (st.getText().startsWith("#headhunter", 0)) {
+//					Log.d("AA", "headhunter found! :D");// HTTP Post
+//					found = true;
+//					
+//				}
+//			}
+//			if(found){
+////			nameValuePairs.add(new BasicNameValuePair("score", "10"));
+//			
+//			}
+//		} catch (Exception ex) {
+//			Toast.makeText(this, "Error:" + ex.getMessage(), Toast.LENGTH_LONG)
+//					.show();
+//			Log.d("OAuth.displayTimeLine", "" + ex.getMessage());
+//		}
+	}
+	
 }
 

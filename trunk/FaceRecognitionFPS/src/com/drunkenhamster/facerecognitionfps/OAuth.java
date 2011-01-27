@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.apache.http.HttpEntity;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.NameValuePair;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.entity.UrlEncodedFormEntity;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.message.BasicNameValuePair;
+//import org.json.JSONArray;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -65,11 +65,12 @@ public class OAuth extends Activity {
 	public String imagelocation;
 	public String verifier;
 //	String url = "http://facerecognition.twidel.nl/users/getPlayerInfo.php";
-	String url2 = "http://facerecognition.twidel.nl/users/updateScore.php";
-	String playerId; // userId van de speler uit de database
-	InputStream is;
+//	String url2 = "http://facerecognition.twidel.nl/users/updateScore.php";
+//	String playerId; // userId van de speler uit de database
+//	InputStream is;
 	boolean busySending = false;
-	ArrayList<NameValuePair> nameValuePairs;
+	private boolean scored = false;
+//	ArrayList<NameValuePair> nameValuePairs;
 	/**
 	 * Calls the OAuth login method as soon as its started
 	 */
@@ -86,7 +87,9 @@ public class OAuth extends Activity {
 		settings = getSharedPreferences(PREFS_NAME, 0);
 		editor = settings.edit();
 		imagelocation = settings.getString("lastpic", "default");
-
+		editor.putBoolean("scored", scored);
+		editor.commit();
+		
 		// add login button listener
 		buttonLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -131,7 +134,7 @@ public class OAuth extends Activity {
 								String pic = postPic(imagelocation);
 								twitter.updateStatus("#headhunter " + pic + " "
 										+ status);
-								updateScore();
+//								updateScore();
 								busySending = false;
 								finish();
 							} catch (TwitterException e) {
@@ -151,93 +154,95 @@ public class OAuth extends Activity {
 		});
 	}
 
-	public void updateScore() {
-		List<Status> statuses = null;
-		String result = "";
-		try {
-			settings.getString("playerId", "default");
-
-			nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("userId", playerId));
-
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url2);
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpClient.execute(httpPost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-			try {
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(is, "iso-8859-1"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-
-			result = sb.toString();
-			Log.d("AA", entity.getContent().toString());
-		} catch (Exception e) {
-			Log.e("AA", "error converting result " + e.toString());
-		}
-		}
-			catch (Exception e) {
-				Log.e("AA", "error in http connection " + e.toString());
-			}
+//	public void updateScore() {
+//		List<Status> statuses = null;
+//		String result = "";
+//		try {
+//			settings.getString("playerId", "default");
+//
+//			nameValuePairs = new ArrayList<NameValuePair>();
+//			nameValuePairs.add(new BasicNameValuePair("userId", playerId));
+//
 //			HttpClient httpClient = new DefaultHttpClient();
-//			HttpPost httpPost = new HttpPost(url);
+//			HttpPost httpPost = new HttpPost(url2);
 //			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 //			HttpResponse response = httpClient.execute(httpPost);
 //			HttpEntity entity = response.getEntity();
 //			is = entity.getContent();
-//			// Convert response to string
 //			try {
-//				BufferedReader reader = new BufferedReader(
-//						new InputStreamReader(is, "iso-8859-1"), 8);
-//				StringBuilder sb = new StringBuilder();
-//				String line = null;
-//				while ((line = reader.readLine()) != null) {
-//					sb.append(line + "\n");
-//				}
-//				is.close();
-//
-//				result = sb.toString();
-//			} catch (Exception e) {
-//				Log.e("AA", "error converting result " + e.toString());
+//			BufferedReader reader = new BufferedReader(
+//					new InputStreamReader(is, "iso-8859-1"), 8);
+//			StringBuilder sb = new StringBuilder();
+//			String line = null;
+//			while ((line = reader.readLine()) != null) {
+//				sb.append(line + "\n");
 //			}
+//			is.close();
+//
+//			result = sb.toString();
+//			Log.d("AA", entity.getContent().toString());
 //		} catch (Exception e) {
-//			Log.e("AA", "error in http connection " + e.toString());
+//			Log.e("AA", "error converting result " + e.toString());
 //		}
-		try {
-			statuses = twitter.getUserTimeline();
-			Toast.makeText(
-					this,
-					"Tweet placed! Press Back button to continue playing :"
-							+ statuses.get(0).getText(), Toast.LENGTH_SHORT)
-					.show();
-			boolean found = false;
-			for (Status st : statuses) {
-				if (st.getText().startsWith("#headhunter", 0)) {
-					Log.d("AA", "headhunter found! :D");// HTTP Post
-					found = true;
-					
-				}
-			}
-			if(found){
-//			nameValuePairs.add(new BasicNameValuePair("score", "10"));
-			
-			}
-		} catch (Exception ex) {
-			Toast.makeText(this, "Error:" + ex.getMessage(), Toast.LENGTH_LONG)
-					.show();
-			Log.d("OAuth.displayTimeLine", "" + ex.getMessage());
-		}
-	}
+//		}
+//			catch (Exception e) {
+//				Log.e("AA", "error in http connection " + e.toString());
+//			}
+////			HttpClient httpClient = new DefaultHttpClient();
+////			HttpPost httpPost = new HttpPost(url);
+////			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+////			HttpResponse response = httpClient.execute(httpPost);
+////			HttpEntity entity = response.getEntity();
+////			is = entity.getContent();
+////			// Convert response to string
+////			try {
+////				BufferedReader reader = new BufferedReader(
+////						new InputStreamReader(is, "iso-8859-1"), 8);
+////				StringBuilder sb = new StringBuilder();
+////				String line = null;
+////				while ((line = reader.readLine()) != null) {
+////					sb.append(line + "\n");
+////				}
+////				is.close();
+////
+////				result = sb.toString();
+////			} catch (Exception e) {
+////				Log.e("AA", "error converting result " + e.toString());
+////			}
+////		} catch (Exception e) {
+////			Log.e("AA", "error in http connection " + e.toString());
+////		}
+//		try {
+//			statuses = twitter.getUserTimeline();
+//			Toast.makeText(
+//					this,
+//					"Tweet placed! Press Back button to continue playing :"
+//							+ statuses.get(0).getText(), Toast.LENGTH_SHORT)
+//					.show();
+//			boolean found = false;
+//			for (Status st : statuses) {
+//				if (st.getText().startsWith("#headhunter", 0)) {
+//					Log.d("AA", "headhunter found! :D");// HTTP Post
+//					found = true;
+//					
+//				}
+//			}
+//			if(found){
+////			nameValuePairs.add(new BasicNameValuePair("score", "10"));
+//			
+//			}
+//		} catch (Exception ex) {
+//			Toast.makeText(this, "Error:" + ex.getMessage(), Toast.LENGTH_LONG)
+//					.show();
+//			Log.d("OAuth.displayTimeLine", "" + ex.getMessage());
+//		}
+//	}
 
 	public String postPic(String imagelocation) {
 		try {
-			Log.d("AA", "post reached");
+			scored = true;
+			editor.putBoolean("scored", scored);
+			editor.commit();
 			File file = new File(imagelocation);
 			MediaProvider mProvider = MediaProvider.YFROG;
 
@@ -327,7 +332,7 @@ public class OAuth extends Activity {
 			try {
 				twitter.setOAuthAccessToken(token, secret);
 				statuses = twitter.getFriendsTimeline();
-				Toast.makeText(this, statuses.get(0).getText(),
+				Toast.makeText(this, "Logged in to twitter",
 						Toast.LENGTH_LONG).show();
 			} catch (Exception ex) {
 				Toast.makeText(this, "Error:" + ex.getMessage(),

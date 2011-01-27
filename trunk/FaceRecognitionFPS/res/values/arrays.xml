@@ -15,7 +15,7 @@
 -->
 <resources>
 	<string-array name="select_fdetlevel">
-        <item>Fine (detect small faces but slow)</item>
+        <item>Close-up(recommended for "in the face" shots!</item>
         <item>Normal(recommended)</item>
     </string-array>
 	<string-array name="select_appmode">

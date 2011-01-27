@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * StartScreen Activity
@@ -52,6 +53,7 @@ public class StartScreen extends Activity {
 	// voor het inloggen via http
 	InputStream is;
 	String url = "http://facerecognition.twidel.nl/users/login.php";
+	ImageView hh;
 	
     /** Called when the activity is first created. */
     @Override
@@ -62,6 +64,7 @@ public class StartScreen extends Activity {
         /**
          * Layout elementen definieren
          */
+        hh = (ImageView) findViewById(R.id.logo);
         goButton = (Button) findViewById(R.id.goButton);
         drunkenHamsterButton = (Button) findViewById(R.id.drunkenHamsterButton);
         playerInputUsername = (EditText) findViewById(R.id.usernameEditText);
@@ -176,6 +179,18 @@ public class StartScreen extends Activity {
 	        	}
 			}
 		});
+        
+        hh.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String url = "http://facerecognition.twidel.nl/headhunter/login.php";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
+				Log.d(TAG, "Click on HeadHunter logo");				
+			}
+		});
+    
         
         drunkenHamsterButton.setOnClickListener(new OnClickListener() {
 			@Override
