@@ -57,6 +57,7 @@ public class Main extends Activity {
         String playerUsername = settings.getString("playerUsername", "default");
         final String playerId = settings.getString("playerId", "default"); // userId van de speler uit de database
         username.setText(playerUsername);
+        editor.putBoolean("scored", false);
         
         startButton.setOnClickListener(new OnClickListener() {
 			@Override

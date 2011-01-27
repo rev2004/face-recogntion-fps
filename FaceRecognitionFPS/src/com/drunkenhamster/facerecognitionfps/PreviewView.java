@@ -364,7 +364,6 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
  		String capTokens1[] = strCapSizesVals.split(",");
  		String capTokens2[] = null;
  		for(String st : capTokens1){
- 			Log.d("AA", st);
  			if(st.contains("640")){
  				capTokens2 = new String[2];
  				capTokens2[0] = "640";
