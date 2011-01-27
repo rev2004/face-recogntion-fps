@@ -305,7 +305,7 @@ public class Achievements extends Activity {
 			Log.e(TAG, "error parsing json data " + e.toString());
 		}
 
-		updateScore();
+//		updateScore();
 
 		drunkenHamsterButton.setOnClickListener(new OnClickListener() {
 			/**

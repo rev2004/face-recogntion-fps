@@ -236,7 +236,7 @@ public class SnapFaceActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode==KeyEvent.KEYCODE_BACK){
-			//updateScore();
+			updateScore();
 	        if(calledACTION_GET_CONTENT_){
 	        	setResult(RESULT_CANCELED);
 				tracker_.trackEvent(getString(R.string.GA_CAT_ACT), getString(R.string.GA_ACT_GET_CONTENT), getString(R.string.GA_LBL_CANCEL) , 1);
@@ -275,7 +275,7 @@ public class SnapFaceActivity extends Activity {
 		Log.d("AA", "intent made");
 		startActivityForResult(intentSingleGame, 0);
 		Log.d("AA", "activity started");
-		//updateScore();
+		updateScore();
 	}
 	
 	public void updateScore() {
@@ -284,52 +284,21 @@ public class SnapFaceActivity extends Activity {
 		try {
 			settings2 = getSharedPreferences(PREFS_NAME, 0);
 		    editor = settings2.edit();
-			settings2.getString("playerId", "default");
+			playerId = settings2.getString("playerId", "default");
 			boolean scored = settings2.getBoolean("scored", false);
 			if(!scored){return;}
 			Log.d("AA", "Scored");
 			nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("userId", playerId));
-
+			Log.d("AA", nameValuePairs.get(0).getValue());
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
+			HttpPost httpPost = new HttpPost(url2);
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-			try {
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(is, "iso-8859-1"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			Toast.makeText(
-			this,
-			"Tweet placed! Press Back button to continue playing ", Toast.LENGTH_SHORT)
-			.show();
-			result = sb.toString();
-			Log.d("AA", "made it past PHP part");
-			editor.putBoolean("scored", false);
-			editor.commit();
-		} catch (Exception e) {
-			Log.e("AA", "error converting result " + e.toString());
+		}catch (Exception e) {
+			Log.e(TAG, "error in http connection " + e.toString());
 		}
-		}
-			catch (Exception e) {
-				Log.e("AA", "error in http connection " + e.toString());
-			}
-			 try{
-		        	JSONArray jArray = new JSONArray(result);
-		        	for(int i = 0; i < jArray.length(); i++){
-		        		JSONObject data = jArray.getJSONObject(i);
-		        		Log.i("AA", "username: "+data.getString("username")+ "\n score: "+data.getString("score"));
-		        	}
-		    }catch(JSONException e){
-		            	Log.e(TAG, "error parsing json data " +e.toString());
-		            }
 //			HttpClient httpClient = new DefaultHttpClient();
 //			HttpPost httpPost = new HttpPost(url);
 //			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

@@ -142,7 +142,6 @@ public class OAuth extends Activity {
 								e.printStackTrace();
 							}
 						} else {
-							
 							tweetText.setText("Logging you in to twitter, post again when this is finished!");
 							busySending = false;
 							OAuthLogin();
@@ -262,13 +261,15 @@ public class OAuth extends Activity {
 			props.put(PropertyConfiguration.OAUTH_CONSUMER_SECRET,
 					consumerSecret);
 			twitter4j.conf.Configuration conf = new PropertyConfiguration(props);
-			Log.d("AA", "Intent?");
 			ImageUploaderFactory factory = new ImageUploaderFactory(conf);
 			factory.getInstance(mProvider, twitter.getAuthorization());
 			ImageUpload upload = factory.getInstance(mProvider);
 
-			Log.d("AA", "Intent?");
 			String url = upload.upload(file);
+			Toast.makeText(
+					this,
+					"Tweet placed! Press Back button to continue playing ", Toast.LENGTH_SHORT)
+					.show();
 			return url;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -332,7 +333,7 @@ public class OAuth extends Activity {
 			try {
 				twitter.setOAuthAccessToken(token, secret);
 				statuses = twitter.getFriendsTimeline();
-				Toast.makeText(this, "Logged in to twitter",
+				Toast.makeText(this, "Logged in to Twitter, please make your post now",
 						Toast.LENGTH_LONG).show();
 			} catch (Exception ex) {
 				Toast.makeText(this, "Error:" + ex.getMessage(),
