@@ -7,7 +7,7 @@
 	<ImageView android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:src="@drawable/logo"
 		android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
-		android:id="@+id/logo" android:layout_marginTop="50.333333333333333dip">
+		android:id="@+id/logo" android:layout_marginTop="50.333333333333333dip" android:clickable="true">
 	</ImageView>
 	<RelativeLayout android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:layout_centerHorizontal="true"

@@ -68,7 +68,7 @@ class PreviewView extends SurfaceView implements SurfaceHolder.Callback, Preview
 	public String lastTakenpicString = null;
     private static final String TAG = "SnapFace";
     
-	private final static int PREVIEW_WIDTH_FINE		= 640;
+	private final static int PREVIEW_WIDTH_FINE		= 240;
 	private final static int PREVIEW_WIDTH_NORMAL	= 384;
 	
 	// mag ratio for eye-distant to face region
