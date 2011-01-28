@@ -132,7 +132,7 @@ public class OAuth extends Activity {
 								
 								Log.d("AA", "update button");
 								String pic = postPic(imagelocation);
-								twitter.updateStatus("#headhunter " + pic + " "
+								twitter.updateStatus("#headhuntergame " + pic + " "
 										+ status);
 //								updateScore();
 								busySending = false;
