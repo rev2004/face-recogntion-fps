@@ -33,6 +33,7 @@ public class Main extends Activity {
 	Button startButton, gameModeButton, achievementsButton, 
 		   quitButton, drunkenHamsterButton;						// Buttons
 	TextView username;												// Textview voor de spelernaam
+	//TextView tvSessionId;											// Textview voor sessionId
 	
     /** Called when the activity is first created. */
     @Override
@@ -49,6 +50,7 @@ public class Main extends Activity {
         quitButton = (Button) findViewById(R.id.quitButton);
         drunkenHamsterButton = (Button) findViewById(R.id.drunkenHamsterButton);
         username = (TextView) findViewById(R.id.playerName);
+        //tvSessionId = (TextView) findViewById(R.id.tvSessionId);
         /**
          * SharedPreferences ophalen en username textview aanpassen
          */
@@ -57,6 +59,8 @@ public class Main extends Activity {
         String playerUsername = settings.getString("playerUsername", "default");
         final String playerId = settings.getString("playerId", "default"); // userId van de speler uit de database
         username.setText(playerUsername);
+        //String playerSessionId = settings.getString("sessionId", "default");
+        //tvSessionId.setText(playerSessionId);
         editor.putBoolean("scored", false);
         
         startButton.setOnClickListener(new OnClickListener() {

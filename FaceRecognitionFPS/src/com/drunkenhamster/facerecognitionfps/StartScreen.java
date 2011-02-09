@@ -124,6 +124,7 @@ public class StartScreen extends Activity {
 							if(data.getString("login").equalsIgnoreCase("success")){
 								Log.d(TAG, "inloggen gelukt");
 								editor.putString("playerId", data.getString("userid"));
+								//editor.putString("sessionId", data.getString("sessionId"));
 								// Variabelen doorsturen naar volgende scherm
 								editor.commit();
 								// Nu pas doorsturen naar het main menu
