@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:id="@+id/RelativeLayout01"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:padding="0dip" android:layout_height="wrap_content"
+	android:layout_width="fill_parent" android:background="@drawable/background">
+	<ImageView android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:src="@drawable/logo"
+		android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
+		android:id="@+id/logo" android:layout_marginTop="10dip">
+	</ImageView>
+	<RelativeLayout android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:layout_centerHorizontal="true"
+		android:id="@+id/playerInfoLayout" android:layout_below="@+id/logo" android:layout_marginTop="25dip">
+		<TextView android:typeface="sans" android:textSize="14px" android:layout_height="wrap_content" android:text="PLAYER:" android:id="@+id/achievementsPlayer" android:textColor="@color/Gold" android:gravity="right" android:paddingRight="25dip" android:layout_width="wrap_content"></TextView>
+		
+	
+<TextView android:textSize="14px" android:id="@+id/achievementsRank" android:layout_height="wrap_content" android:text="RANK:" android:paddingTop="5dip" android:typeface="sans" android:layout_below="@+id/achievementsPlayer" android:layout_alignLeft="@+id/achievementsPlayer" android:layout_alignRight="@+id/achievementsPlayer" android:textColor="@color/Gold" android:gravity="right" android:paddingRight="25dip" android:layout_width="wrap_content"></TextView><TextView android:layout_height="wrap_content" android:layout_below="@+id/achievementsRank" android:layout_alignLeft="@+id/achievementsRank" android:layout_alignRight="@+id/achievementsRank" android:id="@+id/achievementsScore" android:textSize="14px" android:typeface="sans" android:text="SCORE:" android:textColor="@color/Gold" android:paddingTop="5dip" android:gravity="right" android:paddingRight="25dip" android:layout_width="wrap_content"></TextView><TextView android:layout_height="wrap_content" android:layout_toRightOf="@+id/achievementsScore" android:layout_width="wrap_content" android:layout_alignTop="@+id/achievementsScore" android:layout_alignBottom="@+id/achievementsScore" android:id="@+id/achievementsScoreData" android:text="200" android:textSize="14px" android:typeface="sans" android:paddingTop="5dip" android:textColor="@color/playerColor"></TextView><TextView android:textSize="14px" android:id="@+id/achievementsRankData" android:textColor="@color/playerColor" android:layout_height="wrap_content" android:text="achievements" android:typeface="sans" android:layout_width="wrap_content" android:layout_toRightOf="@+id/achievementsRank" android:layout_alignTop="@+id/achievementsRank" android:layout_alignBottom="@+id/achievementsRank" android:paddingTop="5dip"></TextView><TextView android:layout_height="wrap_content" android:layout_toRightOf="@+id/achievementsPlayer" android:layout_width="wrap_content" android:layout_alignTop="@+id/achievementsPlayer" android:layout_alignBottom="@+id/achievementsPlayer" android:id="@+id/achievementsPlayerData" android:textSize="14px" android:typeface="sans" android:textColor="@color/playerColor" android:text="speler"></TextView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
+	<AbsoluteLayout android:layout_alignParentBottom="true"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:id="@+id/drunkenHamsterLayout">
+		<Button android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:background="@drawable/drunkenhamsterlogo"
+			android:id="@+id/drunkenHamsterButton"></Button>
+	</AbsoluteLayout>
+<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/playerInfoLayout" android:layout_centerHorizontal="true" android:id="@+id/rankInfoLayout" android:layout_marginTop="30dip">
+
+
+
+
+
+<ImageView android:id="@+id/rankBar" android:background="@drawable/rank_bar" android:layout_marginTop="8px" android:layout_height="wrap_content" android:layout_width="wrap_content"></ImageView>
+
+
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/rankNextRankFull" android:layout_alignLeft="@+id/rankNextRankText" android:layout_alignRight="@+id/rankNextRankText" android:layout_below="@+id/rankNextRankText" android:text="1st luitenant" android:textColor="@color/black" android:textSize="10px" android:textStyle="bold" android:gravity="center"></TextView><TextView android:layout_height="wrap_content" android:layout_below="@+id/rankNextRank" android:id="@+id/rankNextRankText" android:text="NEXT RANK:" android:textColor="@color/black" android:gravity="center" android:textSize="10px" android:layout_marginTop="5px" android:layout_width="190px" android:layout_marginLeft="55px"></TextView><TextView android:layout_height="wrap_content" android:id="@+id/rankNextRank" android:text="622 / 750" android:gravity="center" android:textColor="@color/black" android:textSize="14px" android:layout_width="190px" android:layout_marginTop="15px" android:layout_marginLeft="55px"></TextView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/private_class" android:id="@+id/rankImageLeft" android:layout_marginLeft="45px"></ImageView>
+
+<ImageView android:id="@+id/rankImageRight" android:layout_width="wrap_content" android:background="@drawable/private_class" android:layout_height="wrap_content" android:layout_toRightOf="@+id/rankImageLeft" android:layout_alignTop="@+id/rankImageLeft" android:layout_alignBottom="@+id/rankImageLeft" android:layout_marginLeft="125dip"></ImageView>
+
+
+
+
+
+
+
+</RelativeLayout>
+</RelativeLayout>

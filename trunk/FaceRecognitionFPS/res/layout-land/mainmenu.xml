@@ -6,15 +6,15 @@
 	<ImageView android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:src="@drawable/logo"
 		android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
-		android:id="@+id/logo" android:layout_marginTop="50.333333333333333dip">
+		android:id="@+id/logo" android:layout_marginTop="10dip">
 	</ImageView>
 	<RelativeLayout android:layout_below="@+id/logo"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:layout_centerHorizontal="true"
-		android:id="@+id/menuBackgroundLayout" android:layout_marginTop="46.666666666666667dip">
+		android:id="@+id/menuBackgroundLayout" android:layout_marginTop="25dip">
 		
 		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/gameModeButton" android:layout_below="@+id/startButton" android:layout_alignRight="@+id/startButton" android:layout_alignLeft="@+id/startButton" android:layout_marginTop="5dip" android:background="@drawable/btn_teambattle"></Button>
-	<Button android:layout_width="wrap_content" android:layout_below="@+id/gameModeButton" android:layout_height="wrap_content" android:layout_alignLeft="@+id/gameModeButton" android:layout_alignRight="@+id/gameModeButton" android:id="@+id/achievementsButton" android:layout_marginTop="5dip" android:background="@drawable/btn_achievements"></Button><Button android:layout_width="wrap_content" android:layout_below="@+id/achievementsButton" android:layout_height="wrap_content" android:layout_alignLeft="@+id/achievementsButton" android:layout_alignRight="@+id/achievementsButton" android:id="@+id/quitButton" android:layout_marginTop="5dip" android:background="@drawable/btn_quitgame"></Button><Button android:layout_alignParentTop="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/startButton" android:layout_centerHorizontal="true" android:layout_marginTop="6dip" android:background="@drawable/btn_singlebatle"></Button>
+	<Button android:layout_width="wrap_content" android:layout_below="@+id/gameModeButton" android:layout_height="wrap_content" android:layout_alignLeft="@+id/gameModeButton" android:layout_alignRight="@+id/gameModeButton" android:id="@+id/achievementsButton" android:layout_marginTop="5dip" android:background="@drawable/btn_achievements"></Button><Button android:layout_width="wrap_content" android:layout_below="@+id/achievementsButton" android:layout_height="wrap_content" android:layout_alignLeft="@+id/achievementsButton" android:layout_alignRight="@+id/achievementsButton" android:id="@+id/quitButton" android:layout_marginTop="5dip" android:background="@drawable/btn_quitgame"></Button><Button android:layout_alignParentTop="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/startButton" android:layout_centerHorizontal="true" android:background="@drawable/btn_singlebatle"></Button>
 
 
 
@@ -24,7 +24,7 @@
 		android:layout_width="wrap_content" android:layout_below="@+id/menuBackgroundLayout"
 		android:layout_centerHorizontal="true" android:layout_alignRight="@+id/menuBackgroundLayout"
 		android:layout_alignLeft="@+id/menuBackgroundLayout"
-		android:layout_marginTop="30dip" android:id="@+id/playerInfoLayout">
+		android:id="@+id/playerInfoLayout" android:layout_marginTop="20dip">
 		<TextView android:layout_alignParentTop="true"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:typeface="sans" android:textColor="@color/playerColor"
