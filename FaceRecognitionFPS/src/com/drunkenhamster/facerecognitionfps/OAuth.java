@@ -81,7 +81,7 @@ public class OAuth extends Activity {
 		setContentView(R.layout.twitterscreen);
 		// OAuthLogin();
 
-		buttonLogin = (Button) findViewById(R.id.ButtonLogin);
+		//buttonLogin = (Button) findViewById(R.id.ButtonLogin);
 		buttonUpdate = (Button) findViewById(R.id.ButtonUpdate);
 		tweetText = (EditText) findViewById(R.id.textStatus);
 		settings = getSharedPreferences(PREFS_NAME, 0);
@@ -89,69 +89,74 @@ public class OAuth extends Activity {
 		imagelocation = settings.getString("lastpic", "default");
 		editor.putBoolean("scored", scored);
 		editor.commit();
-		
+		buttonUpdate.setText("Login at Twitter");
 		// add login button listener
-		buttonLogin.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				OAuthLogin();
-			}
-		});
+//		buttonLogin.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				OAuthLogin();
+//			}
+//		});
 		// tweetText.setText(imagelocation);
 
 		// add update button listener
 		buttonUpdate.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if (!busySending) {
-					String yourtweet = tweetText.getText().toString();
-					String status = tweetText.getText().toString();
-					tweetText.setText("Busy sending your tweet, please wait a moment");
-					if (status.length() > 100) {
-						final AlertDialog alertDialog = new AlertDialog.Builder(
-								OAuth.this).create();
-						alertDialog.setTitle(" ");
-						alertDialog
-								.setMessage("Your message shouldn'nt be longer than a 100 characters. please shorten it.");
-						alertDialog.setButton("Ok",
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										alertDialog.cancel();
-									}
-								});
-						alertDialog.setIcon(R.drawable.icon);
-						tweetText.setText(yourtweet);
-						alertDialog.show();
-
-					} else {
-						busySending = true;
-
-						Log.d("AUTH", "update button");
-						if (twitter.isOAuthEnabled() == true) {
-							try {
-								
-								Log.d("AA", "update button");
-								String pic = postPic(imagelocation);
-								twitter.updateStatus("#headhuntergame " + pic + " "
-										+ status);
-//								updateScore();
-								busySending = false;
-								finish();
-							} catch (TwitterException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						} else {
-							tweetText.setText("Logging you in to twitter, post again when this is finished!");
-							busySending = false;
-							OAuthLogin();
-							tweetText.setText(yourtweet);
-						}
-					}
-				}
-			}
+			public void onClick(View v) {onUpdate(v);}
 		});
 	}
+	
+	public void onUpdate(View v){
+		if (!busySending) {
+			String yourtweet = tweetText.getText().toString();
+			String status = tweetText.getText().toString();
+			tweetText.setText("Busy sending your tweet, please wait a moment");
+			if (status.length() > 100) {
+				final AlertDialog alertDialog = new AlertDialog.Builder(
+						OAuth.this).create();
+				alertDialog.setTitle(" ");
+				alertDialog
+						.setMessage("Your message shouldn'nt be longer than a 100 characters. please shorten it.");
+				alertDialog.setButton("Ok",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								alertDialog.cancel();
+							}
+						});
+				alertDialog.setIcon(R.drawable.icon);
+				tweetText.setText(yourtweet);
+				alertDialog.show();
+
+			} else {
+				busySending = true;
+
+				Log.d("AUTH", "update button");
+				if (twitter.isOAuthEnabled() == true) {
+					try {
+						
+						Log.d("AA", "update button");
+						String pic = postPic(imagelocation);
+						twitter.updateStatus("#headhuntergame " + pic + " "
+								+ status);
+//						updateScore();
+						busySending = false;
+						finish();
+					} catch (TwitterException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					tweetText.setText("Logging you in to twitter, post again when this is finished!");
+					busySending = false;
+					OAuthLogin();
+					tweetText.setText(yourtweet);
+					//onUpdate(v);
+				}
+			}
+		}
+	
+	}
+	
 
 //	public void updateScore() {
 //		List<Status> statuses = null;
@@ -295,6 +300,7 @@ public class OAuth extends Activity {
 			Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
 			Log.e("in OAuth.OAuthLogin", ex.getMessage());
 		}
+		buttonUpdate.setText("Send your photo and message");
 	}
 
 	/**
